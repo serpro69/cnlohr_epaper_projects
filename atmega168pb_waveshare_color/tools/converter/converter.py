@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
+
 # encoding: utf-8
 
 import sys
 import os.path
-from PIL import Image, ImagePalette, ImageOps
+from PIL import Image, ImageOps
 import argparse
 
 # Create an ArgumentParser object
@@ -97,16 +98,16 @@ pal_image.putpalette(
      0, 0, 255,
      0, 255, 0) + (0, 0, 0)*249)
 
-# (override with) port from converter.c
-pal_image.putpalette(
-    (0, 0, 0,
-     255, 255, 255,
-     67, 138, 28,
-     100, 64, 255,
-     191, 0, 0,
-     255, 243, 56,
-     232, 126, 0,
-     194, 164, 244) + (0, 0, 0)*248)
+# # (override with) port from converter.c
+# pal_image.putpalette(
+#     (0, 0, 0,
+#      255, 255, 255,
+#      67, 138, 28,
+#      100, 64, 255,
+#      191, 0, 0,
+#      255, 243, 56,
+#      232, 126, 0,
+#      194, 164, 244) + (0, 0, 0)*248)
 
 # The color quantization and dithering algorithms are performed, and the results are converted to RGB mode
 quantized_image = resized_image.quantize(
