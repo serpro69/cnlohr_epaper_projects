@@ -12,6 +12,8 @@ parser = argparse.ArgumentParser(description='Process some images.')
 
 # Add orientation parameter
 parser.add_argument('image_file', type=str, help='Input image file')
+parser.add_argument('--out', type=str,
+                    help='Output directory (default: current directory)')
 parser.add_argument('--dir', choices=['landscape', 'portrait'],
                     help='Image direction (landscape or portrait)')
 parser.add_argument('--mode', choices=['scale', 'cut'],
@@ -24,6 +26,7 @@ args = parser.parse_args()
 
 # Get input parameter
 input_filename = args.image_file
+output_dir = args.out if args.out else os.path.dirname(input_filename)
 display_direction = args.dir
 display_mode = args.mode
 display_dither = Image.Dither(args.dither)
@@ -90,13 +93,14 @@ pal_image = Image.new("P", (1, 1))
 
 # Original palette from Waveshare
 pal_image.putpalette(
-    (0, 0, 0,
-     255, 255, 255,
-     255, 255, 0,
-     255, 0, 0,
-     0, 0, 0,
-     0, 0, 255,
-     0, 255, 0) + (0, 0, 0)*249)
+    (0, 0, 0,            # 0 black
+     255, 255, 255,      # 1 white
+     255, 255, 0,        # 2 yellow
+     255, 0, 0,          # 3 red
+     0, 0, 0,            # 4 black
+     0, 0, 255,          # 5 blue
+     0, 255, 0,          # 6 green
+     ) + (0, 0, 0)*249)  # rest colors to black
 
 # # (override with) port from converter.c
 # pal_image.putpalette(
@@ -114,7 +118,8 @@ quantized_image = resized_image.quantize(
     dither=display_dither, palette=pal_image).convert('RGB')
 
 # Save output image
-output_filename = os.path.splitext(input_filename)[
+output_filename = os.path.abspath(output_dir) + '/' + \
+    os.path.splitext(os.path.basename(input_filename))[
     0] + '_' + display_mode + '_output.bmp'
 quantized_image.save(output_filename)
 
